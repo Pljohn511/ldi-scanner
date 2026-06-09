@@ -482,7 +482,7 @@ async function markComplete() {
     const resp = await fetch(url, {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fields: { Status: 'Completed', 'Assigned Tech': tech } })
+      body: JSON.stringify({ fields: { Status: 'Completed' } })
     });
 
     if (!resp.ok) {
