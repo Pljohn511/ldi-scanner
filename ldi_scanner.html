@@ -107,16 +107,30 @@
     width: 100%;
     position: relative;
     background: #000;
-    min-height: 220px;
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   #viewport canvas, #viewport video {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
+    object-fit: cover !important;
     display: block;
+  }
+
+  width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
+
+  #viewport {
+    height: 260px;
   }
 
   .scan-overlay {
