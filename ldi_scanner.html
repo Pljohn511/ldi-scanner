@@ -4,285 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>LDI Job Scanner</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zxing-js/0.18.6/zxing.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #0f172a;
-    color: #f1f5f9;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  header {
-    width: 100%;
-    background: #1a365d;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 3px solid #c2410c;
-  }
-
-  header .logo {
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #fff;
-  }
-
-  header .sub {
-    font-size: 11px;
-    color: #93c5fd;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .main {
-    width: 100%;
-    max-width: 480px;
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  /* --- CONFIG PANEL --- */
-  .config-panel {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #334155;
-  }
-
-  .config-panel label {
-    font-size: 11px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .config-panel input {
-    width: 100%;
-    background: #0f172a;
-    border: 1px solid #475569;
-    border-radius: 8px;
-    padding: 10px 12px;
-    color: #f1f5f9;
-    font-size: 13px;
-    font-family: monospace;
-  }
-
-  .config-panel input:focus {
-    outline: none;
-    border-color: #3b82f6;
-  }
-
-  .tech-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .tech-row input {
-    flex: 1;
-  }
-
-  /* --- SCANNER AREA --- */
-  .scanner-box {
-    background: #1e293b;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #334155;
-    position: relative;
-  }
-
-  #viewport {
-    width: 100%;
-    position: relative;
-    background: #000;
-    height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #viewport canvas, #viewport video {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block;
-  }
-
-  width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block;
-  }
-
-  #viewport {
-    height: 260px;
-  }
-
-  .scan-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
-
-  .scan-frame {
-    width: 80%;
-    height: 80px;
-    border: 2px solid #f97316;
-    border-radius: 6px;
-    box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
-  }
-
-  .scanner-idle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 40px 20px;
-    min-height: 220px;
-  }
-
-  .scanner-idle svg { opacity: 0.3; }
-
-  .scanner-idle p {
-    color: #64748b;
-    font-size: 14px;
-    text-align: center;
-  }
-
-  .scan-btn {
-    width: 100%;
-    padding: 16px;
-    background: #c2410c;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: background 0.15s;
-  }
-
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  header { width: 100%; background: #1a365d; padding: 14px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid #c2410c; }
+  header .logo { font-size: 22px; font-weight: 900; letter-spacing: 2px; color: #fff; }
+  header .sub { font-size: 11px; color: #93c5fd; letter-spacing: 1px; text-transform: uppercase; }
+  .main { width: 100%; max-width: 480px; padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; }
+  .config-panel { background: #1e293b; border-radius: 12px; padding: 16px; border: 1px solid #334155; }
+  .config-panel label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+  .config-panel input { width: 100%; background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 10px 12px; color: #f1f5f9; font-size: 13px; font-family: monospace; }
+  .config-panel input:focus { outline: none; border-color: #3b82f6; }
+  .tech-row { display: flex; gap: 8px; margin-top: 12px; }
+  .tech-row > div { flex: 1; }
+  .scanner-box { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; position: relative; }
+  #viewport { width: 100%; height: 260px; position: relative; background: #000; }
+  #viewport video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+  .scan-overlay { position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 10; }
+  .scan-frame { width: 80%; height: 80px; border: 2px solid #f97316; border-radius: 6px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
+  .scanner-idle { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 40px 20px; height: 260px; }
+  .scanner-idle p { color: #64748b; font-size: 14px; text-align: center; }
+  .scan-btn { width: 100%; padding: 16px; background: #c2410c; color: white; font-size: 16px; font-weight: 700; border: none; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: background 0.15s; }
   .scan-btn:hover { background: #9a3412; }
-  .scan-btn:disabled { background: #475569; cursor: not-allowed; }
-
-  .stop-btn {
-    background: #1e293b;
-    color: #94a3b8;
-    border-top: 1px solid #334155;
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  /* --- RESULT CARD --- */
-  .result-card {
-    background: #1e293b;
-    border-radius: 12px;
-    border: 1px solid #334155;
-    overflow: hidden;
-    display: none;
-  }
-
+  .stop-btn { background: #1e293b; color: #94a3b8; border-top: 1px solid #334155; font-size: 13px; padding: 10px; }
+  .result-card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden; display: none; }
   .result-card.visible { display: block; }
-
-  .result-header {
-    padding: 14px 16px;
-    background: #0f172a;
-    border-bottom: 1px solid #334155;
-    font-size: 11px;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
+  .result-header { padding: 14px 16px; background: #0f172a; border-bottom: 1px solid #334155; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
   .result-body { padding: 16px; }
-
-  .result-field {
-    margin-bottom: 12px;
-  }
-
-  .result-field .field-label {
-    font-size: 10px;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
-  }
-
-  .result-field .field-value {
-    font-size: 15px;
-    font-weight: 600;
-    color: #f1f5f9;
-  }
-
-  .status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .badge-ready    { background: #166534; color: #bbf7d0; }
-  .badge-pending  { background: #92400e; color: #fde68a; }
+  .result-field { margin-bottom: 12px; }
+  .result-field .field-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .result-field .field-value { font-size: 15px; font-weight: 600; color: #f1f5f9; }
+  .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .badge-ready { background: #166534; color: #bbf7d0; }
+  .badge-pending { background: #92400e; color: #fde68a; }
   .badge-complete { background: #1e3a5f; color: #93c5fd; }
-  .badge-other    { background: #374151; color: #d1d5db; }
-
-  .confirm-btn {
-    width: 100%;
-    padding: 16px;
-    background: #15803d;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 16px;
-    border-radius: 8px;
-    transition: background 0.15s;
-  }
-
+  .badge-other { background: #374151; color: #d1d5db; }
+  .confirm-btn { width: 100%; padding: 16px; background: #15803d; color: white; font-size: 16px; font-weight: 700; border: none; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; margin-top: 16px; border-radius: 8px; transition: background 0.15s; }
   .confirm-btn:hover { background: #166534; }
   .confirm-btn:disabled { background: #374151; cursor: not-allowed; }
-
-  /* --- STATUS MESSAGE --- */
-  .status-msg {
-    text-align: center;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    display: none;
-  }
-
+  .status-msg { text-align: center; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 600; display: none; }
   .status-msg.visible { display: block; }
   .status-msg.success { background: #14532d; color: #bbf7d0; border: 1px solid #16a34a; }
-  .status-msg.error   { background: #450a0a; color: #fca5a5; border: 1px solid #dc2626; }
-  .status-msg.info    { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
+  .status-msg.error { background: #450a0a; color: #fca5a5; border: 1px solid #dc2626; }
+  .status-msg.info { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
 </style>
 </head>
 <body>
@@ -296,23 +61,21 @@
 
 <div class="main">
 
-  <!-- Config -->
   <div class="config-panel">
     <label>Airtable PAT Token</label>
     <input type="password" id="patInput" placeholder="paste token here..." />
     <div class="tech-row">
-      <div style="flex:1">
+      <div>
         <label style="margin-top:12px">Tech Name</label>
         <input type="text" id="techInput" placeholder="e.g. Jose" />
       </div>
     </div>
   </div>
 
-  <!-- Scanner -->
   <div class="scanner-box">
     <div id="viewport">
       <div class="scanner-idle" id="idleMsg">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="opacity:0.3">
           <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
           <rect x="3" y="14" width="7" height="7" rx="1"/>
           <path d="M14 14h2v2h-2zM18 14h3M14 18h2M18 18h3v3M21 14v2"/>
@@ -327,7 +90,6 @@
     <button class="scan-btn stop-btn" id="stopBtn" style="display:none" onclick="stopScan()">✕ Cancel</button>
   </div>
 
-  <!-- Result -->
   <div class="result-card" id="resultCard">
     <div class="result-header">Scanned Job</div>
     <div class="result-body">
@@ -351,7 +113,6 @@
     </div>
   </div>
 
-  <!-- Status message -->
   <div class="status-msg" id="statusMsg"></div>
 
 </div>
@@ -360,9 +121,7 @@
 const BASE_ID = 'appgrbd9I6SX3D3yQ';
 const TABLE   = 'LDI%20Production';
 let currentRecordId = null;
-let scanning = false;
-let lastScan = '';
-let lastScanTime = 0;
+let codeReader = null;
 
 function getToken() { return document.getElementById('patInput').value.trim(); }
 function getTech()  { return document.getElementById('techInput').value.trim() || 'Unknown'; }
@@ -377,7 +136,7 @@ function hideStatus() {
   document.getElementById('statusMsg').className = 'status-msg';
 }
 
-function startScan() {
+async function startScan() {
   if (!getToken()) { showStatus('Please enter your Airtable PAT token first.', 'error'); return; }
 
   document.getElementById('idleMsg').style.display = 'none';
@@ -387,35 +146,32 @@ function startScan() {
   document.getElementById('resultCard').className = 'result-card';
   hideStatus();
 
-  Quagga.init({
-    inputStream: {
-      name: 'Live',
-      type: 'LiveStream',
-      target: document.getElementById('viewport'),
-      constraints: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-    },
-    decoder: { readers: ['code_128_reader'] },
-    locate: true
-  }, err => {
-    if (err) { showStatus('Camera error: ' + err.message, 'error'); stopScan(); return; }
-    Quagga.start();
-    scanning = true;
-  });
+  try {
+    codeReader = new ZXing.BrowserMultiFormatReader();
+    const videoEl = document.createElement('video');
+    videoEl.setAttribute('playsinline', true);
+    document.getElementById('viewport').appendChild(videoEl);
 
-  Quagga.onDetected(result => {
-    const code = result.codeResult.code;
-    const now = Date.now();
-    if (code === lastScan && now - lastScanTime < 3000) return;
-    // Require at least 6 characters to avoid false positives
-    if (!code || code.length < 6) return;
-    lastScan = code;
-    lastScanTime = now;
-    onBarcodeDetected(code);
-  });
+    await codeReader.decodeFromConstraints(
+      { video: { facingMode: 'environment' } },
+      videoEl,
+      (result, err) => {
+        if (result) {
+          const code = result.getText();
+          onBarcodeDetected(code);
+        }
+      }
+    );
+  } catch(e) {
+    showStatus('Camera error: ' + e.message, 'error');
+    stopScan();
+  }
 }
 
 function stopScan() {
-  if (scanning) { Quagga.stop(); scanning = false; }
+  if (codeReader) { codeReader.reset(); codeReader = null; }
+  const video = document.querySelector('#viewport video');
+  if (video) video.remove();
   document.getElementById('idleMsg').style.display = 'flex';
   document.getElementById('scanOverlay').style.display = 'none';
   document.getElementById('startBtn').style.display = 'block';
@@ -485,7 +241,7 @@ async function markComplete() {
     const resp = await fetch(url, {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fields: { Status: 'Completed' } })
+      body: JSON.stringify({ fields: { Status: 'Completed', 'Assigned Tech': tech } })
     });
 
     if (!resp.ok) {
