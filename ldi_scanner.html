@@ -406,6 +406,8 @@ function startScan() {
     const code = result.codeResult.code;
     const now = Date.now();
     if (code === lastScan && now - lastScanTime < 3000) return;
+    // Require at least 6 characters to avoid false positives
+    if (!code || code.length < 6) return;
     lastScan = code;
     lastScanTime = now;
     onBarcodeDetected(code);
@@ -422,7 +424,7 @@ function stopScan() {
 
 async function onBarcodeDetected(code) {
   stopScan();
-  showStatus('Looking up job…', 'info');
+  showStatus(`Detected: ${code} — looking up…`, 'info');
 
   const token = getToken();
   const formula = encodeURIComponent(`{Job Ref}="${code}"`);
