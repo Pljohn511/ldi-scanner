@@ -188,13 +188,12 @@ async function onBarcodeDetected(code) {
   try {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     if (!resp.ok) { showStatus('Airtable error: ' + resp.status, 'error'); return; }
-    const data = await resp.json();
+    const rec = await resp.json();
 
-    if (!data.records || data.records.length === 0) {
+    if (!rec.id) {
       showStatus(`No record found for: ${code}`, 'error'); return;
     }
 
-    const rec = data.records[0];
     currentRecordId = rec.id;
     const f = rec.fields;
 
