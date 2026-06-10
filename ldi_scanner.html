@@ -183,7 +183,7 @@ async function onBarcodeDetected(code) {
   showStatus(`Detected: ${code} — looking up…`, 'info');
 
   const token = getToken();
-  const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE}/${code}`;
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${code}`;
 
   try {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
