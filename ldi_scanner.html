@@ -159,7 +159,9 @@ async function startScan() {
   hideStatus();
 
   try {
-    codeReader = new ZXing.BrowserBarcodeReader();
+    const hints = new Map();
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.CODE_128]);
+    codeReader = new ZXing.BrowserMultiFormatReader(hints);
     const videoEl = document.createElement('video');
     videoEl.setAttribute('playsinline', true);
     document.getElementById('viewport').appendChild(videoEl);
