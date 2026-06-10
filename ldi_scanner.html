@@ -191,7 +191,7 @@ function stopScan() {
 }
 
 async function onBarcodeDetected(code) {
-  if (!code.startsWith('rec') || code.length !== 20) return;
+  if (!code.startsWith('rec')) return;
   stopScan();
   showStatus(`Detected: ${code} — looking up…`, 'info');
 
