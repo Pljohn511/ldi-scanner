@@ -50,7 +50,7 @@
   .status-msg.info { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
 </style>
 </head>
-<body>
+<body onload="loadSaved()">
 
 <header>
   <div>
@@ -126,6 +126,17 @@ let codeReader = null;
 function getToken() { return document.getElementById('patInput').value.trim(); }
 function getTech()  { return document.getElementById('techInput').value.trim() || 'Unknown'; }
 
+function loadSaved() {
+  const pat = localStorage.getItem('ldi_pat');
+  const tech = localStorage.getItem('ldi_tech');
+  if (pat) document.getElementById('patInput').value = pat;
+  if (tech) document.getElementById('techInput').value = tech;
+}
+
+function saveCreds() {
+  localStorage.setItem('ldi_pat', document.getElementById('patInput').value.trim());
+  localStorage.setItem('ldi_tech', document.getElementById('techInput').value.trim());
+}
 function showStatus(msg, type) {
   const el = document.getElementById('statusMsg');
   el.textContent = msg;
@@ -138,6 +149,7 @@ function hideStatus() {
 
 async function startScan() {
   if (!getToken()) { showStatus('Please enter your Airtable PAT token first.', 'error'); return; }
+  saveCreds();
 
   document.getElementById('idleMsg').style.display = 'none';
   document.getElementById('scanOverlay').style.display = 'flex';
