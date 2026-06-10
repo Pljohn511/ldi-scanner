@@ -183,8 +183,7 @@ async function onBarcodeDetected(code) {
   showStatus(`Detected: ${code} — looking up…`, 'info');
 
   const token = getToken();
-  const formula = encodeURIComponent(`{Job Ref}="${code}"`);
-  const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE}?filterByFormula=${formula}&maxRecords=1`;
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE}/${code}`;
 
   try {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
