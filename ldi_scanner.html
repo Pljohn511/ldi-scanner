@@ -147,7 +147,7 @@ async function startScan() {
   hideStatus();
 
   try {
-    codeReader = new ZXing.BrowserMultiFormatReader();
+    codeReader = new ZXing.BrowserBarcodeReader();
     const videoEl = document.createElement('video');
     videoEl.setAttribute('playsinline', true);
     document.getElementById('viewport').appendChild(videoEl);
